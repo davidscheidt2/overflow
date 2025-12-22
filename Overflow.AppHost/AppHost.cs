@@ -1,6 +1,24 @@
+using Projects;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
+
+#pragma warning disable ASPIRECERTIFICATES001 // experimental in 13.1
 var keycloak = builder.AddKeycloak("keycloak", 6001)
-    .WithDataVolume("keycloak-data");
+    .WithDataVolume("keycloak-data")
+    .WithoutHttpsCertificate();
+#pragma warning restore ASPIRECERTIFICATES001
+
+var postgres = builder.AddPostgres("postgres", port: 5432)
+    .WithDataVolume("postgres-data")
+    .WithPgAdmin();
+
+var questionDb = postgres.AddDatabase("questionDb");
+
+var questionService = builder.AddProject<QuestionService>("question-svc")
+    .WithReference(keycloak)
+    .WithReference(questionDb)
+    .WaitFor(keycloak)
+    .WaitFor(questionDb);
 
 builder.Build().Run();
