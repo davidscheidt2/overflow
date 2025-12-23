@@ -3,11 +3,8 @@ using Projects;
 var builder = DistributedApplication.CreateBuilder(args);
 
 
-#pragma warning disable ASPIRECERTIFICATES001 // experimental in 13.1
 var keycloak = builder.AddKeycloak("keycloak", 6001)
-    .WithDataVolume("keycloak-data")
-    .WithoutHttpsCertificate();
-#pragma warning restore ASPIRECERTIFICATES001
+    .WithDataVolume("keycloak-data");
 
 var postgres = builder.AddPostgres("postgres", port: 5432)
     .WithDataVolume("postgres-data")
