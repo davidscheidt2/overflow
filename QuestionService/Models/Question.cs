@@ -5,7 +5,7 @@ namespace QuestionService.Models;
 public class Question
 {
     [MaxLength(36)]
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string Id { get; init; } = Guid.NewGuid().ToString();
     [MaxLength(300)]
     public required string Title { get; set; }
     [MaxLength(5000)]
@@ -14,10 +14,12 @@ public class Question
     public required string AskerId { get; set; }
     [MaxLength(300)]
     public required string AskerDisplayName { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
     public int ViewCount { get; set; }
     public List<String> TagSlugs { get; set; } = [];
     public bool HasAcceptedAnswer { get; set; }
     public int Votes { get; set; }
+    public int AnswerCount { get; set; }
+    public ICollection<Answer> Answers { get; set; } = [];
 }
